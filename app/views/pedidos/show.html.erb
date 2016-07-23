@@ -9,6 +9,10 @@
   <strong>Valor:</strong>
   <%= @pedido.valor %>
 </p>
+<p>
+  <strong>Valor Total:</strong>
+  <%= @pedido.valortotal %>
+</p>
 
 <%= link_to 'Edit', edit_pedido_path(@pedido) %> |
 <%= link_to 'Back', pedidos_path %>

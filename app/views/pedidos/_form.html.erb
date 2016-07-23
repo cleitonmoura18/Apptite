@@ -10,16 +10,16 @@
       </ul>
     </div>
   <% end %>
+  <div class="field">
+   <%= f.collection_select(:produto_id, Produto.all, :id, :nome)%>
+  </div>
 
   <div class="field">
     <%= f.label :quantidade %>
     <%= f.number_field :quantidade %>
   </div>
 
-  <div class="field">
-    <%= f.label :valor %>
-    <%= f.text_field :valor %>
-  </div>
+  
 
   <div class="actions">
     <%= f.submit %>

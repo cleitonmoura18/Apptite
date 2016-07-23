@@ -1,4 +1,5 @@
 class PedidosController < ApplicationController
+  before_filter :authenticate_user!
   before_action :set_pedido, only: [:show, :edit, :update, :destroy]
 
   # GET /pedidos
@@ -25,6 +26,7 @@ class PedidosController < ApplicationController
   # POST /pedidos.json
   def create
     @pedido = Pedido.new(pedido_params)
+    atualizarPedido @pedido
 
     respond_to do |format|
       if @pedido.save
@@ -40,6 +42,7 @@ class PedidosController < ApplicationController
   # PATCH/PUT /pedidos/1
   # PATCH/PUT /pedidos/1.json
   def update
+    atualizarPedido @pedido
     respond_to do |format|
       if @pedido.update(pedido_params)
         format.html { redirect_to @pedido, notice: 'Pedido was successfully updated.' }
@@ -69,6 +72,11 @@ class PedidosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pedido_params
-      params.require(:pedido).permit(:quantidade, :valor)
+      params.require(:pedido).permit(:quantidade, :valor, :produto_id)
+    end
+
+    def atualizarPedido(pedido)
+      pedido.valor = pedido.produto.preco
+      pedido.user_id=current_user.id
     end
 end
