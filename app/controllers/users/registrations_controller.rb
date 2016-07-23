@@ -9,12 +9,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
   
-   #def create
+   def create
     super
-   #end
+    resource.status=0
+    resource.save
+   end
 
   # GET /resource/edit
-  # def edit
+  #def edit
   #   super
   # end
 
@@ -24,25 +26,28 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # DELETE /resource
-  # def destroy
-  #   super
-  # end
+   def destroy
+    resource.cancelado!
+    Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name)
+    set_flash_message! :notice, :destroyed
+    yield resource if block_given?
+    respond_with_navigational(resource){ redirect_to after_sign_out_path_for(resource_name) }
+   end
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign
   # in to be expired now. This is useful if the user wants to
   # cancel oauth signing in/up in the middle of the process,
   # removing all OAuth session data.
-  # def cancel
-  #   super
-  # end
+   def cancel
+     super
+   end
 
   # protected
 
    #If you have extra params to permit, append them to the sanitizer.
    def configure_sign_up_params
-      user.status=0
-     devise_parameter_sanitizer.permit(:sign_up, keys: [:empresa_id])
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:empresa_id])
    end
 
   # If you have extra params to permit, append them to the sanitizer.
